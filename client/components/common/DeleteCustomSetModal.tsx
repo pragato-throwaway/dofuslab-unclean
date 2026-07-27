@@ -1,0 +1,78 @@
+/** @jsxImportSource @emotion/react */
+
+import type { MouseEvent } from 'react';
+
+import { useCallback, useContext } from 'react';
+import { Modal } from 'antd';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
+
+import { useTranslation } from 'next-i18next';
+import {
+  deleteCustomSet,
+  deleteCustomSetVariables,
+} from 'graphql/mutations/__generated__/deleteCustomSet';
+import deleteCustomSetMutation from 'graphql/mutations/deleteCustomSet.graphql';
+import NotificationContext from 'common/notificationContext';
+
+interface Props {
+  open: boolean;
+  onCancel: () => void;
+  customSetId: string;
+}
+
+const DeleteCustomSetModal = ({ open, onCancel, customSetId }: Props) => {
+  const { t } = useTranslation('common');
+  const notificationApi = useContext(NotificationContext);
+  const [deleteMutate, { loading: deleteLoading }] = useMutation<
+    deleteCustomSet,
+    deleteCustomSetVariables
+  >(deleteCustomSetMutation, {
+    variables: { customSetId },
+    refetchQueries: () => ['buildList'],
+    awaitRefetchQueries: true,
+  });
+  const router = useRouter();
+
+  const onDelete = useCallback(
+    async (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      const { data } = await deleteMutate();
+      onCancel();
+      if (data?.deleteCustomSet?.ok) {
+        if (customSetId === router.query.customSetId) {
+          router.push('/', '/', { shallow: true });
+        }
+        notificationApi.success({
+          message: t('SUCCESS'),
+          description: t('DELETE_BUILD_SUCCESS'),
+        });
+      }
+    },
+    [deleteMutate, router, onCancel, customSetId],
+  );
+
+  const onCancelClick = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      onCancel();
+    },
+    [onCancel],
+  );
+
+  return (
+    <Modal
+      open={open}
+      title={t('DELETE_BUILD')}
+      onOk={onDelete}
+      onCancel={onCancelClick}
+      confirmLoading={deleteLoading}
+      okButtonProps={{ danger: true }}
+      okText={t('DELETE')}
+    >
+      <div>{t('CONFIRM_DELETE_BUILD')}</div>
+    </Modal>
+  );
+};
+
+export default DeleteCustomSetModal;

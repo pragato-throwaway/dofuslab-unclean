@@ -1,0 +1,11 @@
+#import "graphql/fragments/spellVariantPair.graphql"
+
+query classById($id: UUID!) {
+  classById(id: $id) {
+    id
+    name
+    spellVariantPairs {
+      ...spellVariantPair
+    }
+  }
+}

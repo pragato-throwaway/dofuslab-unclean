@@ -1,0 +1,36 @@
+{
+  "DESCRIPTION": "Descrizione",
+  "KEYBOARD_SHORTCUT": "Scorciatoia",
+  "KEYBOARD_SHORTCUTS": "Scorciatoie",
+  "KEYS": {
+    "BACKSPACE": "Backspace",
+    "DELETE": "Delete",
+    "ENTER": "Enter",
+    "ESCAPE": "Esc",
+    "SPACE": "Space"
+  },
+  "ONLY_AVAILABLE_ADVANCED_MODE": "Le scorciatoie da tastiera sono disponibili solo in modalità avanzata.",
+  "OPERATIONS": {
+    "DELETE_SELECTED_ITEM": "Elimina l'oggetto selezionato",
+    "DESELECT_ITEM_SLOT": "Deselezionare lo slot dell'oggetto",
+    "DESELECT_SEARCH_BAR": "Deselezionare la barra di ricerca",
+    "EQUIP_NTH_ITEM_SET": "Equipaggiare l'ennesimo oggetto",
+    "NAVIGATE_ITEM_SLOTS": "Navigare tra gli slot degli oggetti",
+    "SELECT_ITEM_SLOT": "Selezionare gli slot degli oggetti",
+    "SELECT_SEARCH_BAR": "Selezionare la barra di ricerca",
+    "TOGGLE_ITEM_SET_SWITCH": "Alternare tra oggetti/panoplie"
+  },
+  "SHORTCUTS": "Scorciatoie",
+  "SLOTS": {
+    "AMULET": "Amuleto",
+    "BELT": "Cintura",
+    "BOOTS": "Stivali",
+    "CLOAK": "Mantello",
+    "DOFUS": "Dofus",
+    "HAT": "Cappello",
+    "PET": "Pet",
+    "RING": "Anello",
+    "SHIELD": "Scudo",
+    "WEAPON": "Arma"
+  }
+}

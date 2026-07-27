@@ -1,0 +1,7 @@
+#import "graphql/fragments/dofusClass.graphql"
+
+query classes {
+  classes {
+    ...dofusClass
+  }
+}

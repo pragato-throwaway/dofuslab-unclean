@@ -1,0 +1,8 @@
+{
+  "EXO": "Exo {{stat}}",
+  "MAGE": "Maguear",
+  "MAGE_MODAL_TITLE": "Magueando {{itemName}}",
+  "MORE_MAGING_OPTIONS": "Más opciones de magueo",
+  "REMOVE_EXO": "Eliminar {{stat}} exo",
+  "RESET_TO_ORIGINAL": "Restablecer los stats originales"
+}

@@ -1,0 +1,16 @@
+{
+  "VERIFY_EMAIL": {
+    "ALREADY_VERIFIED": {
+      "DESCRIPTION": "Sua conta já está confirmada. Não é necessária nenhuma ação adicional.",
+      "TITLE": "Está pronto para começar."
+    },
+    "INVALID": {
+      "DESCRIPTION": "O link de verificação expirou ou é inválido.",
+      "TITLE": "URL Inválido"
+    },
+    "SUCCESS": {
+      "DESCRIPTION": "Você verificou sua conta com sucesso. obrigado!",
+      "TITLE": "Sucesso"
+    }
+  }
+}

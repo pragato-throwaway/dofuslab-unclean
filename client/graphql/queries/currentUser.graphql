@@ -1,0 +1,25 @@
+#import "graphql/fragments/item.graphql"
+
+query currentUser {
+  currentUser {
+    id
+    username
+    email
+    verified
+    favoriteItems {
+      ...item
+    }
+    settings {
+      id
+      buildGender
+      buildClass {
+        id
+        maleFaceImageUrl
+        femaleFaceImageUrl
+        maleSpriteImageUrl
+        femaleSpriteImageUrl
+        name
+      }
+    }
+  }
+}

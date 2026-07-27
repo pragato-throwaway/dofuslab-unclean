@@ -1,0 +1,35 @@
+#import "graphql/fragments/equippedItem.graphql"
+#import "graphql/fragments/customSetStats.graphql"
+#import "graphql/fragments/customSetTagAssociation.graphql"
+
+fragment customSet on CustomSet {
+  id
+  name
+  level
+  equippedItems {
+    ...equippedItem
+  }
+  stats {
+    ...customSetStats
+  }
+  owner {
+    id
+    username
+  }
+  defaultClass {
+    id
+    name
+    enName
+    femaleFaceImageUrl
+    maleFaceImageUrl
+    femaleSpriteImageUrl
+    maleSpriteImageUrl
+  }
+  creationDate
+  lastModified
+  tagAssociations {
+    ...customSetTagAssociation
+  }
+  hasEditPermission
+  buildGender
+}

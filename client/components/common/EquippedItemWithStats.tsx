@@ -1,0 +1,231 @@
+/** @jsxImportSource @emotion/react */
+
+import type { MouseEvent, SyntheticEvent } from 'react';
+
+import { useCallback, useState, useRef, useContext } from 'react';
+import { ClassNames, useTheme } from '@emotion/react';
+import { Popover } from 'antd';
+import merge from 'lodash/merge';
+
+import {
+  popoverTitleStyle,
+  itemImageBox,
+  selected as selectedBox,
+  itemImageDimensions,
+  gold5,
+  popoverShadow,
+} from 'common/mixins';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faMagic,
+  faTimes,
+  faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  useDeleteItemMutation,
+  EditableContext,
+  ClassicContext,
+  getImageUrl,
+} from 'common/utils';
+import { mq } from 'common/constants';
+import { Media } from 'components/common/Media';
+import { BuildError } from 'common/types';
+
+import { BrokenImagePlaceholder } from 'common/wrappers';
+import { EquippedItem, CustomSet, ItemSet } from 'common/type-aliases';
+import { TooltipPlacement } from 'antd/lib/tooltip';
+import EquippedItemCard from '../desktop/EquippedItemCard';
+
+const wrapperStyles = {
+  position: 'absolute' as const,
+  right: 6,
+  top: 6,
+  fontSize: '1rem',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 4,
+  margin: -4,
+  transition: 'opacity 0.3s ease-in-out',
+  opacity: 0.3,
+  [mq[1]]: {
+    fontSize: '0.75rem',
+    opacity: 0,
+  },
+};
+
+interface Props {
+  equippedItem: EquippedItem;
+  selected: boolean;
+  customSet: CustomSet;
+  itemSlotId: string;
+  openMageModal: (equippedItem: EquippedItem) => void;
+  openSetModal: (set: ItemSet) => void;
+  errors?: Array<BuildError>;
+  className?: string;
+  popoverPlacement?: TooltipPlacement;
+}
+
+const EquippedItemWithStats = ({
+  equippedItem,
+  selected,
+  customSet,
+  itemSlotId,
+  openMageModal,
+  openSetModal,
+  errors,
+  className,
+  popoverPlacement,
+}: Props) => {
+  const deleteItem = useDeleteItemMutation(customSet);
+  const stopPropagationCallback = useCallback((e: MouseEvent<HTMLElement>) => {
+    // prevent selection of item slot
+    e.stopPropagation();
+  }, []);
+  const onDelete = useCallback(
+    (e: SyntheticEvent<HTMLElement>) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (deleteItem) {
+        deleteItem(equippedItem.slot.id);
+      }
+    },
+    [deleteItem, equippedItem],
+  );
+
+  const theme = useTheme();
+  const [brokenImage, setBrokenImage] = useState(false);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  const isEditable = useContext(EditableContext);
+  const [isClassic] = useContext(ClassicContext);
+
+  const content = (
+    <ClassNames>
+      {({ css, cx }) => {
+        const wrapperClass = css(wrapperStyles);
+        return (
+          <div
+            ref={contentRef}
+            className={cx(
+              css(
+                itemImageBox(theme, isEditable),
+                css(selected ? selectedBox(theme) : {}),
+                css({
+                  '&:hover': {
+                    [`.${wrapperClass}`]: {
+                      opacity: 0.3,
+                      '&:hover': {
+                        opacity: 1,
+                      },
+                    },
+                  },
+                }),
+              ),
+              className,
+            )}
+          >
+            {brokenImage ? (
+              <BrokenImagePlaceholder
+                css={{ ...itemImageDimensions, fontSize: '1.2rem' }}
+              />
+            ) : (
+              <img
+                src={getImageUrl(equippedItem.item.imageUrl)}
+                css={itemImageDimensions}
+                onError={() => setBrokenImage(true)}
+                alt={equippedItem.item.name}
+              />
+            )}
+            {(equippedItem.exos.length > 0 ||
+              equippedItem.weaponElementMage) && (
+              <FontAwesomeIcon
+                icon={faMagic}
+                css={{
+                  position: 'absolute',
+                  left: 6,
+                  bottom: 6,
+                  fontSize: '0.75rem',
+                  opacity: 0.3,
+                }}
+              />
+            )}
+            {errors?.length && (
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                css={{
+                  position: 'absolute',
+                  left: 6,
+                  top: 6,
+                  fontSize: '0.75rem',
+                  color: gold5,
+                }}
+              />
+            )}
+            {isEditable && (
+              <div className={wrapperClass} onClick={onDelete}>
+                <FontAwesomeIcon icon={faTimes} />
+              </div>
+            )}
+          </div>
+        );
+      }}
+    </ClassNames>
+  );
+
+  return (
+    <>
+      <Media greaterThanOrEqual="xs">
+        <ClassNames>
+          {({ css }) => (
+            <Popover
+              placement={popoverPlacement || 'bottomLeft'}
+              content={
+                <EquippedItemCard
+                  equippedItem={equippedItem}
+                  itemSlotId={itemSlotId}
+                  customSet={customSet}
+                  openMageModal={openMageModal}
+                  openSetModal={openSetModal}
+                  stopPropagationCallback={stopPropagationCallback}
+                  errors={errors}
+                />
+              }
+              overlayClassName={css({
+                ...merge(
+                  {
+                    '.ant-popover-title': { marginBottom: 0 },
+                  },
+                  popoverTitleStyle,
+                ),
+                '.ant-popover-content': {
+                  boxShadow: popoverShadow,
+                  maxHeight:
+                    contentRef.current && !isClassic
+                      ? `calc(100vh - ${
+                          contentRef.current.offsetTop +
+                          contentRef.current.offsetHeight +
+                          20
+                        }px)`
+                      : undefined,
+                  overflow: 'auto',
+                },
+                '.ant-popover-inner-content': { padding: 0 },
+                '.ant-popover-inner': {
+                  padding: 0,
+                },
+                maxWidth: 312,
+              })}
+              autoAdjustOverflow={{ adjustX: 1, adjustY: 0 }}
+            >
+              <div>{content}</div>
+            </Popover>
+          )}
+        </ClassNames>
+      </Media>
+      <Media lessThan="xs">{content}</Media>
+    </>
+  );
+};
+
+export default EquippedItemWithStats;

@@ -1,0 +1,31 @@
+#import "graphql/fragments/buff.graphql"
+#import "graphql/fragments/weaponStats.graphql"
+#import "graphql/fragments/itemTypeWithSlots.graphql"
+#import "graphql/fragments/itemSet.graphql"
+
+fragment item on Item {
+  id
+  name
+  level
+  imageUrl
+  stats {
+    id
+    order
+    maxValue
+    stat
+    customStat
+  }
+  weaponStats {
+    ...weaponStats
+  }
+  conditions
+  itemType {
+    ...itemTypeWithSlots
+  }
+  set {
+    ...itemSet
+  }
+  buffs {
+    ...buff
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "VERIFY_EMAIL": {
+    "ALREADY_VERIFIED": {
+      "DESCRIPTION": "Your account is already verified. No further action is required.",
+      "TITLE": "You're good to go."
+    },
+    "INVALID": {
+      "DESCRIPTION": "The verification link has expired or is invalid.",
+      "TITLE": "Invalid URL"
+    },
+    "SUCCESS": {
+      "DESCRIPTION": "You have successfully verified your account. Thanks!",
+      "TITLE": "Success"
+    }
+  }
+}

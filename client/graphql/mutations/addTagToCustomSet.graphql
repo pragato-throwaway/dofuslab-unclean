@@ -1,0 +1,19 @@
+mutation addTagToCustomSet($customSetId: UUID, $customSetTagId: UUID!) {
+  addTagToCustomSet(
+    customSetId: $customSetId
+    customSetTagId: $customSetTagId
+  ) {
+    customSet {
+      id
+      tagAssociations {
+        id
+        associationDate
+        customSetTag {
+          id
+          name
+          imageUrl
+        }
+      }
+    }
+  }
+}

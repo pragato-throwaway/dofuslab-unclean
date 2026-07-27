@@ -1,0 +1,27 @@
+#import "graphql/fragments/item.graphql"
+
+mutation login($email: String!, $password: String!, $remember: Boolean!) {
+  loginUser(email: $email, password: $password, remember: $remember) {
+    user {
+      id
+      favoriteItems {
+        ...item
+      }
+      username
+      email
+      verified
+      settings {
+        id
+        buildGender
+        buildClass {
+          id
+          maleFaceImageUrl
+          femaleFaceImageUrl
+          maleSpriteImageUrl
+          femaleSpriteImageUrl
+          name
+        }
+      }
+    }
+  }
+}

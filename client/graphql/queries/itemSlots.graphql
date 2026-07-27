@@ -1,0 +1,7 @@
+#import "graphql/fragments/itemSlot.graphql"
+
+query itemSlots {
+  itemSlots {
+    ...itemSlot
+  }
+}
